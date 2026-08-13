@@ -1,0 +1,45 @@
+﻿using Inventory_Management_Platform.Infrastructure.Authintication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace Inventory_Management_Platform.Api.Extensions
+{
+    public static class AuthenticationServiceExtensions
+    {
+        public static IServiceCollection AddJwtAuthentication(
+            this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration
+                .GetSection(JwtSettings.SectionName)
+                .Get<JwtSettings>()!;
+
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.MapInboundClaims = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = jwtSettings.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            services.AddAuthorization();
+
+            return services;
+        }
+    }
+}

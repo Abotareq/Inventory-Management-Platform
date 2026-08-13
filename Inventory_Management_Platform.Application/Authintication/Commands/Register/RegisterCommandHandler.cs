@@ -3,6 +3,7 @@ using Inventory_Management_Platform.Application.Common.Interfaces.Authentication
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Authentication;
 using Inventory_Management_Platform.Domain.DomainErrors;
+using Inventory_Management_Platform.Domain.User;
 using Inventory_Management_Platform.Domain.User.Entites;
 using Inventory_Management_Platform.Domain.User.ValueObjects;
 using MediatR;
@@ -39,18 +40,36 @@ namespace Inventory_Management_Platform.Application.Authintication.Commands.Regi
 
             // 2. Create the correct Domain aggregate based on the requested role
             //    (validates fullName/email before touching Identity)
-            ErrorOr<User> userResult = request.Role switch
+            ErrorOr<User> userResult;
+
+            switch (request.Role)
             {
-                "Administrator" => Administrator.Create(userId, request.FullName, request.Email),
-                "WarehouseOperator" => WarehouseOperator.Create(userId, request.FullName, request.Email),
-                "Manager" => Manager.Create(userId, request.FullName, request.Email),
-                _ => Errors.User.InvalidRole
-            };
+                case "Administrator":
+                    var adminResult = Administrator.Create(userId, request.FullName, request.Email);
+                    userResult = adminResult.IsError ? adminResult.Errors : adminResult.Value;
+                    break;
+
+                case "WarehouseOperator":
+                    var operatorResult = WarehouseOperator.Create(userId, request.FullName, request.Email);
+                    userResult = operatorResult.IsError ? operatorResult.Errors : operatorResult.Value;
+                    break;
+
+                case "Manager":
+                    var managerResult = Manager.Create(userId, request.FullName, request.Email);
+                    userResult = managerResult.IsError ? managerResult.Errors : managerResult.Value;
+                    break;
+
+                default:
+                    userResult = Errors.User.InvalidRole;
+                    break;
+            }
 
             if (userResult.IsError)
                 return userResult.Errors;
 
             var user = userResult.Value;
+
+     
 
             // 3. Create the identity account using the SAME id and the requested role
             var identityResult = await _authService.RegisterIdentityUserAsync(
