@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Inventory_Management_Platform.Api/Inventory_Management_Platform.Api.csproj" />
+  <Project Path="Inventory_Management_Platform.Application/Inventory_Management_Platform.Application.csproj" Id="fc342ec6-5f74-4a52-8a63-2329858f92b0" />
+  <Project Path="Inventory_Management_Platform.Contracts/Inventory_Management_Platform.Contracts.csproj" Id="91e4be5f-0c7a-4bfc-86e6-2ecab3d43c45" />
+  <Project Path="Inventory_Management_Platform.Infrastructure/Inventory_Management_Platform.Infrastructure.csproj" />
+  <Project Path="Inventory_Management_Platform_Domain/Inventory_Management_Platform.Domain.csproj" />
+</Solution>
