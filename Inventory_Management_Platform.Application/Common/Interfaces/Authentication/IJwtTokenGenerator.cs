@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Inventory_Management_Platform.Domain.User;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;

@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inventory_Management_Platform.Contracts\Inventory_Management_Platform.Contracts.csproj" />
+    <ProjectReference Include="..\Inventory_Management_Platform_Domain\Inventory_Management_Platform.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
