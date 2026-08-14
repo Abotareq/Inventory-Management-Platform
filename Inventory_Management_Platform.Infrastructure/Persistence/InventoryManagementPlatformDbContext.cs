@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Domain.Category;
 using Inventory_Management_Platform.Domain.User;
 using Inventory_Management_Platform.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,7 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence
         }
 
         public DbSet<User> Users => Set<User>();
+        public DbSet<Category> Categories => Set<Category>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); // required — configures Identity's own tables

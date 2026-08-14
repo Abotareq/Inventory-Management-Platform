@@ -37,6 +37,7 @@ namespace Inventory_Management_Platform.Infrastructure
                 configuration.GetSection(JwtSettings.SectionName));
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             // Authentication services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
