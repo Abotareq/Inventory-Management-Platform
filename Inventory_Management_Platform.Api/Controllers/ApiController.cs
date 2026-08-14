@@ -1,4 +1,8 @@
-﻿namespace Inventory_Management_Platform.Api.Controllers
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace Inventory_Management_Platform.Api.Controllers
 {
     [ApiController]
     public class ApiController : ControllerBase
