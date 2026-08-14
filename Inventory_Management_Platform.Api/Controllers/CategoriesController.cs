@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Categories.Commands.CreateCategory;
 using Inventory_Management_Platform.Application.Categories.Commands.RenameCategory;
+using Inventory_Management_Platform.Application.Categories.Queries.GetCategories;
 using Inventory_Management_Platform.Application.Categories.Queries.GetCategoryById;
 using Inventory_Management_Platform.Contracts.Category;
 using MediatR;
@@ -51,6 +52,18 @@ namespace Inventory_Management_Platform.Api.Controllers
             var query = new GetCategoryByIdQuery(id);
 
             ErrorOr<CategoryResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAll()
+        {
+            var query = new GetCategoriesQuery();
+
+            ErrorOr<List<CategoryResponse>> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
