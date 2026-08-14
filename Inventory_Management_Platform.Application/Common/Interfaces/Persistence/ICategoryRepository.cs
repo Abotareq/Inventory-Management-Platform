@@ -1,4 +1,5 @@
-﻿using Inventory_Management_Platform.Domain.Category.ValueObjects;
+﻿using Inventory_Management_Platform.Domain.Category;
+using Inventory_Management_Platform.Domain.Category.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
