@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Inventory_Management_Platform.Application.Category.Commands.CreateCategory
+namespace Inventory_Management_Platform.Application.Categories.Commands.CreateCategory
 {
     public sealed class CreateCategoryCommandValidator : AbstractValidator<CreateCategoryCommand>
     {
