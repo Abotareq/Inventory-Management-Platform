@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Inventory_Management_Platform.Contracts.Warehouse
 {
-    internal class WarehouseResponse
-    {
-    }
+    public sealed record WarehouseResponse(
+    Guid Id,
+    string Name,
+    string Location);
 }
