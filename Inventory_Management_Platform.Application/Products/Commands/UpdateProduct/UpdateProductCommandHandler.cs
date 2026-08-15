@@ -3,22 +3,22 @@ using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Product;
 using Inventory_Management_Platform.Domain.Category.ValueObjects;
 using Inventory_Management_Platform.Domain.DomainErrors;
-using Inventory_Management_Platform.Domain.Product;
+using Inventory_Management_Platform.Domain.Product.ValueObjects;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Inventory_Management_Platform.Application.Products.Commands.CreateProduct
+namespace Inventory_Management_Platform.Application.Products.Commands.UpdateProduct
 {
-    public sealed class CreateProductCommandHandler
-        : IRequestHandler<CreateProductCommand, ErrorOr<ProductResponse>>
+    public sealed class UpdateProductCommandHandler
+        : IRequestHandler<UpdateProductCommand, ErrorOr<ProductResponse>>
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CreateProductCommandHandler(
+        public UpdateProductCommandHandler(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
             IUnitOfWork unitOfWork)
@@ -29,10 +29,20 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
         }
 
         public async Task<ErrorOr<ProductResponse>> Handle(
-            CreateProductCommand request, CancellationToken cancellationToken)
+            UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            if (await _productRepository.ExistsBySkuAsync(request.Sku))
+            var product = await _productRepository.GetByIdAsync(
+                ProductId.Create(request.ProductId));
+
+            if (product is null)
+                return Errors.Product.NotFound;
+
+            // Only re-check SKU uniqueness if it actually changed
+            if (!string.Equals(product.Sku, request.Sku, StringComparison.Ordinal)
+                && await _productRepository.ExistsBySkuAsync(request.Sku))
+            {
                 return Errors.Product.SkuAlreadyExists;
+            }
 
             CategoryId? categoryId = null;
 
@@ -45,15 +55,13 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
                     return Errors.Category.NotFound;
             }
 
-            var productResult = Product.Create(
+            var updateResult = product.UpdateDetails(
                 request.Name, request.Sku, request.Description, categoryId);
 
-            if (productResult.IsError)
-                return productResult.Errors;
+            if (updateResult.IsError)
+                return updateResult.Errors;
 
-            var product = productResult.Value;
-
-            await _productRepository.AddAsync(product);
+            _productRepository.Update(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new ProductResponse(
