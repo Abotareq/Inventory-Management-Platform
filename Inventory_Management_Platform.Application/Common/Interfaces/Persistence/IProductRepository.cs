@@ -9,7 +9,7 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
     public interface IProductRepository
     {
         Task<Product?> GetByIdAsync(ProductId id);
-        Task<List<Product>> GetAllAsync();
+        Task<(List<Product> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize);
         Task AddAsync(Product product);
         void Update(Product product);
         Task<bool> ExistsBySkuAsync(string sku);

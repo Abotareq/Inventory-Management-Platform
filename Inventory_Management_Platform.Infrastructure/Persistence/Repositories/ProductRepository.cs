@@ -22,9 +22,18 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
                 .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
-        public async Task<List<Product>> GetAllAsync()
+        public async Task<(List<Product> Items, int TotalCount)> GetPagedAsync(int pageNumber, int pageSize)
         {
-            return await _dbContext.Products.ToListAsync();
+            var query = _dbContext.Products.OrderBy(p => p.Name);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
         }
 
         public async Task AddAsync(Product product)
