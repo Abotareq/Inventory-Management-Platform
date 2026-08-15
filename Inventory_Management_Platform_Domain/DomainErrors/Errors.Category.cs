@@ -20,6 +20,10 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error NotFound => Error.NotFound(
                 "Category.NotFound",
                 "Category was not found.");
+            public static Error HasProducts => Error.Conflict(
+  "Category.HasProducts",
+  "Category cannot be deleted because it has products assigned to it.");
         }
+      
     }
 }

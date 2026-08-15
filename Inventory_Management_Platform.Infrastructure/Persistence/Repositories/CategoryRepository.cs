@@ -42,5 +42,14 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
             return await _dbContext.Categories
                 .AnyAsync(c => c.CategoryId == id);
         }
+        public async Task<bool> HasProductsAsync(CategoryId id)
+        {
+            return await _dbContext.Products
+                .AnyAsync(p => p.CategoryId == id);
+        }
+        public void Delete(Category category)
+        {
+            _dbContext.Categories.Remove(category);
+        }
     }
 }

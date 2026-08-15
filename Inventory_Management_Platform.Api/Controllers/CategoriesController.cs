@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Categories.Commands.CreateCategory;
+using Inventory_Management_Platform.Application.Categories.Commands.DeleteCategory;
 using Inventory_Management_Platform.Application.Categories.Commands.RenameCategory;
 using Inventory_Management_Platform.Application.Categories.Queries.GetCategories;
 using Inventory_Management_Platform.Application.Categories.Queries.GetCategoryById;
@@ -67,6 +68,18 @@ namespace Inventory_Management_Platform.Api.Controllers
 
             return result.Match(
                 response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteCategoryCommand(id);
+
+            ErrorOr<Deleted> result = await _mediator.Send(command);
+
+            return result.Match(
+                deleted => NoContent(),
                 errors => Problem(errors));
         }
     }
