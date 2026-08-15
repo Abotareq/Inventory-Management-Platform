@@ -8,5 +8,5 @@ using System.Text;
 namespace Inventory_Management_Platform.Application.Products.Queries.GetProducts
 {
     public sealed record GetProductsQuery(int PageNumber, int PageSize)
-           : IRequest<ErrorOr<PagedProductsResponse>>;
+      : IRequest<ErrorOr<PagedProductsResponse>>;
 }
