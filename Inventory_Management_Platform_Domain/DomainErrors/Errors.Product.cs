@@ -28,6 +28,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error NotFound => Error.NotFound(
                 "Product.NotFound",
                 "Product was not found.");
+            public static Error SkuAlreadyExists => Error.Conflict(
+    "Product.SkuAlreadyExists",
+    "A product with this SKU already exists.");
         }
     }
 }
