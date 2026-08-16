@@ -8,6 +8,7 @@ namespace Inventory_Management_Platform.Domain.Stock.Entites
 {
     public sealed class StockAdjustment : Entity
     {
+        public StockAdjustmentId StockAdjustmentId { get; private set; }
         public StockId StockId { get; private set; }
         public int Delta { get; private set; }
         public int ResultingQuantity { get; private set; }
@@ -16,15 +17,16 @@ namespace Inventory_Management_Platform.Domain.Stock.Entites
         public DateTime Timestamp { get; private set; }
 
         private StockAdjustment(
-            Guid id,
+            StockAdjustmentId stockAdjustmentId,
             StockId stockId,
             int delta,
             int resultingQuantity,
             string reason,
             Guid performedByUserId,
             DateTime timestamp)
-            : base(id)
+            : base(stockAdjustmentId.Value)
         {
+            StockAdjustmentId = stockAdjustmentId;
             StockId = stockId;
             Delta = delta;
             ResultingQuantity = resultingQuantity;
@@ -44,7 +46,8 @@ namespace Inventory_Management_Platform.Domain.Stock.Entites
             DateTime timestamp)
         {
             return new StockAdjustment(
-                Guid.NewGuid(), stockId, delta, resultingQuantity, reason, performedByUserId, timestamp);
+                StockAdjustmentId.CreateUnique(),
+                stockId, delta, resultingQuantity, reason, performedByUserId, timestamp);
         }
     }
 }

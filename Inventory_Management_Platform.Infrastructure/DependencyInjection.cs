@@ -3,11 +3,12 @@ using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Infrastructure.Authintication;
 using Inventory_Management_Platform.Infrastructure.Identity;
 using Inventory_Management_Platform.Infrastructure.Persistence;
+using Inventory_Management_Platform.Infrastructure.Persistence.Interceptors;
 using Inventory_Management_Platform.Infrastructure.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 namespace Inventory_Management_Platform.Infrastructure
 {
     public static class DependencyInjection
@@ -19,7 +20,9 @@ namespace Inventory_Management_Platform.Infrastructure
             services.AddDbContext<InventoryManagementPlatformDbContext>((sp, options) =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                 });
+                options.AddInterceptors(sp.GetRequiredService<DomainEventsDispatchInterceptor>());
+            });
+            services.AddScoped<DomainEventsDispatchInterceptor>();
             //unit of work
             services.AddScoped<IUnitOfWork>(sp =>
                sp.GetRequiredService<InventoryManagementPlatformDbContext>());
@@ -40,6 +43,7 @@ namespace Inventory_Management_Platform.Infrastructure
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<IStockRepository, StockRepository>();
             // Authentication services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

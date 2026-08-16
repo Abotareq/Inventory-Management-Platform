@@ -30,7 +30,5 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
                 "This product is already assigned to this warehouse.");
         }
     }
-    public class Errors
-    {
-    }
+   
 }
