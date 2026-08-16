@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock;
 using Inventory_Management_Platform.Application.Stocks.Commands.AssignProductToWarehouse;
+using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByProduct;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByWarehouse;
 using Inventory_Management_Platform.Contracts.Stock;
 using MediatR;
@@ -53,6 +54,19 @@ namespace Inventory_Management_Platform.Api.Controllers
     Guid warehouseId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
         {
             var query = new GetStockByWarehouseQuery(warehouseId, pageNumber, pageSize);
+
+            ErrorOr<PagedStockResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet("product/{productId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> GetByProduct(
+    Guid productId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+        {
+            var query = new GetStockByProductQuery(productId, pageNumber, pageSize);
 
             ErrorOr<PagedStockResponse> result = await _mediator.Send(query);
 
