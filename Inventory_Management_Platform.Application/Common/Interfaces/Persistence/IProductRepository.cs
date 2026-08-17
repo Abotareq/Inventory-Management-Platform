@@ -13,5 +13,7 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
         Task AddAsync(Product product);
         void Update(Product product);
         Task<bool> ExistsBySkuAsync(string sku);
+        void Delete(Product product);
+        Task<bool> HasStockAsync(ProductId id);
     }
 }

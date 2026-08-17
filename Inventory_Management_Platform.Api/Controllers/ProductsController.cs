@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Products.Commands.CreateProduct;
+using Inventory_Management_Platform.Application.Products.Commands.DeleteProduct;
 using Inventory_Management_Platform.Application.Products.Commands.UpdateProduct;
 using Inventory_Management_Platform.Application.Products.Queries.GetProductById;
 using Inventory_Management_Platform.Application.Products.Queries.GetProducts;
@@ -68,6 +69,18 @@ namespace Inventory_Management_Platform.Api.Controllers
 
             return result.Match(
                 response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteProductCommand(id);
+
+            ErrorOr<Deleted> result = await _mediator.Send(command);
+
+            return result.Match(
+                deleted => NoContent(),
                 errors => Problem(errors));
         }
     }

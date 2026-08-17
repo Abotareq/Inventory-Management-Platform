@@ -51,5 +51,15 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
             return await _dbContext.Products
                 .AnyAsync(p => p.Sku == sku);
         }
+        public void Delete(Product product)
+        {
+            _dbContext.Products.Remove(product);
+        }
+
+        public async Task<bool> HasStockAsync(ProductId id)
+        {
+            return await _dbContext.Stocks
+                .AnyAsync(s => s.ProductId == id);
+        }
     }
 }

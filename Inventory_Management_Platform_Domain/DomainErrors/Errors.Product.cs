@@ -31,6 +31,10 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error SkuAlreadyExists => Error.Conflict(
     "Product.SkuAlreadyExists",
     "A product with this SKU already exists.");
+            public static Error HasStock => Error.Conflict(
+        "Product.HasStock",
+        "Product cannot be deleted because it has stock records assigned to it.");
         }
+
     }
 }
