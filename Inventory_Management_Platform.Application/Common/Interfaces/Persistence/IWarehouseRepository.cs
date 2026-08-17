@@ -13,5 +13,7 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
         Task AddAsync(Warehouse warehouse);
         void Update(Warehouse warehouse);
         Task<bool> ExistsAsync(WarehouseId id);
+        void Delete(Warehouse warehouse);
+        Task<bool> HasStockAsync(WarehouseId id);
     }
 }

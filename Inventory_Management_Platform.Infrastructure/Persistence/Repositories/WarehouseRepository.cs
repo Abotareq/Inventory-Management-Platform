@@ -43,6 +43,16 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
                 return await _dbContext.Warehouses
                     .AnyAsync(w => w.WarehouseId == id);
             }
+        public void Delete(Warehouse warehouse)
+        {
+            _dbContext.Warehouses.Remove(warehouse);
         }
+
+        public async Task<bool> HasStockAsync(WarehouseId id)
+        {
+            return await _dbContext.Stocks
+                .AnyAsync(s => s.WarehouseId == id);
+        }
+    }
     
 }

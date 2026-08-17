@@ -28,6 +28,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error NotFound => Error.NotFound(
                 "Warehouse.NotFound",
                 "Warehouse was not found.");
+            public static Error HasStock => Error.Conflict(
+    "Warehouse.HasStock",
+    "Warehouse cannot be deleted because it has stock records assigned to it.");
         }
     }
 }
