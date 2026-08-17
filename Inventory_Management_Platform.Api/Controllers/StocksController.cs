@@ -1,12 +1,14 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock;
 using Inventory_Management_Platform.Application.Stocks.Commands.AssignProductToWarehouse;
+using Inventory_Management_Platform.Application.Stocks.Queries.GetStockAdjustmentHistory;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByProduct;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByWarehouse;
 using Inventory_Management_Platform.Contracts.Stock;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Inventory_Management_Platform.Api.Controllers
@@ -33,11 +35,12 @@ namespace Inventory_Management_Platform.Api.Controllers
                 response => Ok(response),
                 errors => Problem(errors));
         }
+
         [HttpPost("adjust")]
         [Authorize(Roles = "WarehouseOperator")]
         public async Task<IActionResult> AdjustStock(AdjustStockRequest request)
         {
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
             var command = new AdjustStockCommand(
                 request.ProductId, request.WarehouseId, request.Amount, request.Reason, userId);
@@ -69,6 +72,19 @@ namespace Inventory_Management_Platform.Api.Controllers
             var query = new GetStockByProductQuery(productId, pageNumber, pageSize);
 
             ErrorOr<PagedStockResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet("{stockId:guid}/history")]
+        [Authorize]
+        public async Task<IActionResult> GetAdjustmentHistory(
+    Guid stockId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+        {
+            var query = new GetStockAdjustmentHistoryQuery(stockId, pageNumber, pageSize);
+
+            ErrorOr<PagedStockAdjustmentsResponse> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
