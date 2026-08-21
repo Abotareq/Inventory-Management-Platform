@@ -1,5 +1,6 @@
 ﻿using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Application.Common.Models;
 using Inventory_Management_Platform.Domain.Category;
 using Inventory_Management_Platform.Domain.Product;
 using Inventory_Management_Platform.Domain.Stock;
@@ -7,6 +8,7 @@ using Inventory_Management_Platform.Domain.Stock.Entites;
 using Inventory_Management_Platform.Domain.User;
 using Inventory_Management_Platform.Domain.Warehouse;
 using Inventory_Management_Platform.Infrastructure.Identity;
+using Inventory_Management_Platform.Infrastructure.Persistence.Auditing;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
@@ -31,6 +33,7 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence
         public DbSet<Warehouse> Warehouses => Set<Warehouse>();
         public DbSet<Stock> Stocks => Set<Stock>();
         public DbSet<StockAdjustment> StockAdjustments => Set<StockAdjustment>();
+        public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); // required — configures Identity's own tables

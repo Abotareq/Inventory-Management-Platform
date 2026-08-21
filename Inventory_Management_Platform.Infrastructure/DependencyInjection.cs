@@ -1,10 +1,13 @@
 ﻿using Inventory_Management_Platform.Application.Common.Interfaces.Authentication;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Application.Common.Interfaces.Services;
 using Inventory_Management_Platform.Infrastructure.Authintication;
 using Inventory_Management_Platform.Infrastructure.Identity;
 using Inventory_Management_Platform.Infrastructure.Persistence;
+using Inventory_Management_Platform.Infrastructure.Persistence.Auditing;
 using Inventory_Management_Platform.Infrastructure.Persistence.Interceptors;
 using Inventory_Management_Platform.Infrastructure.Persistence.Repositories;
+using Inventory_Management_Platform.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +23,9 @@ namespace Inventory_Management_Platform.Infrastructure
             services.AddDbContext<InventoryManagementPlatformDbContext>((sp, options) =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                options.AddInterceptors(sp.GetRequiredService<DomainEventsDispatchInterceptor>());
+                options.AddInterceptors(
+                    sp.GetRequiredService<DomainEventsDispatchInterceptor>(),
+                    sp.GetRequiredService<AuditInterceptor>());
             });
             services.AddScoped<DomainEventsDispatchInterceptor>();
             //unit of work
@@ -47,6 +52,11 @@ namespace Inventory_Management_Platform.Infrastructure
             // Authentication services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            //Auditing
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddScoped<AuditInterceptor>();
+            services.AddScoped<IAuditLogRepository, AuditLogRepository>();
             return services;
 
         }
