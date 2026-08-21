@@ -13,6 +13,7 @@ namespace Inventory_Management_Platform.Domain.Stock
 {
     public sealed class Stock : AggregateRoot
     {
+        public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
         public StockId StockId { get; private set; }
         public ProductId ProductId { get; private set; }
         public WarehouseId WarehouseId { get; private set; }

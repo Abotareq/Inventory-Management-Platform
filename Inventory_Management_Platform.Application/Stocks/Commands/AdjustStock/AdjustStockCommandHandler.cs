@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Stock;
 using Inventory_Management_Platform.Domain.DomainErrors;
@@ -26,7 +27,7 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock
         }
 
         public async Task<ErrorOr<StockResponse>> Handle(
-            AdjustStockCommand request, CancellationToken cancellationToken)
+    AdjustStockCommand request, CancellationToken cancellationToken)
         {
             var productId = ProductId.Create(request.ProductId);
             var warehouseId = WarehouseId.Create(request.WarehouseId);
@@ -42,7 +43,14 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock
             if (adjustResult.IsError)
                 return adjustResult.Errors;
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (ConcurrencyConflictException)
+            {
+                return Errors.Stock.ConcurrencyConflict;
+            }
 
             return new StockResponse(
                 stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value, stock.Quantity);

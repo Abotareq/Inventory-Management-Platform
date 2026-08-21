@@ -24,6 +24,8 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Configuration
             builder.Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.HasIndex(c => c.Name)
+    .IsUnique();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Product;
 using Inventory_Management_Platform.Domain.Category.ValueObjects;
@@ -29,7 +30,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
         }
 
         public async Task<ErrorOr<ProductResponse>> Handle(
-            CreateProductCommand request, CancellationToken cancellationToken)
+     CreateProductCommand request, CancellationToken cancellationToken)
         {
             if (await _productRepository.ExistsBySkuAsync(request.Sku))
                 return Errors.Product.SkuAlreadyExists;
@@ -45,23 +46,23 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
                     return Errors.Category.NotFound;
             }
 
-            var productResult = Product.Create(
-                request.Name, request.Sku, request.Description, categoryId);
-
+            var productResult = Product.Create(request.Name, request.Sku, request.Description, categoryId);
             if (productResult.IsError)
                 return productResult.Errors;
 
             var product = productResult.Value;
 
-            await _productRepository.AddAsync(product);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _productRepository.AddAsync(product);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (UniqueConstraintViolationException)
+            {
+                return Errors.Product.SkuAlreadyExists;
+            }
 
-            return new ProductResponse(
-                product.ProductId.Value,
-                product.Name,
-                product.Sku,
-                product.Description,
-                product.CategoryId?.Value);
+            return new ProductResponse(product.ProductId.Value, product.Name, product.Sku, product.Description, product.CategoryId?.Value);
         }
     }
 }

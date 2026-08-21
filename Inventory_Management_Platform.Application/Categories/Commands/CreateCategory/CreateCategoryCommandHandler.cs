@@ -1,6 +1,8 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Category;
+using Inventory_Management_Platform.Domain.DomainErrors;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -23,16 +25,26 @@ namespace Inventory_Management_Platform.Application.Categories.Commands.CreateCa
         }
 
         public async Task<ErrorOr<CategoryResponse>> Handle(
-      CreateCategoryCommand request, CancellationToken cancellationToken)
+     CreateCategoryCommand request, CancellationToken cancellationToken)
         {
+            if (await _categoryRepository.ExistsByNameAsync(request.Name))
+                return Errors.Category.NameAlreadyExists;
+
             var categoryResult = DomainCategory.Create(request.Name);
             if (categoryResult.IsError)
                 return categoryResult.Errors;
 
             var category = categoryResult.Value;
 
-            await _categoryRepository.AddAsync(category);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _categoryRepository.AddAsync(category);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (UniqueConstraintViolationException)
+            {
+                return Errors.Category.NameAlreadyExists;
+            }
 
             return new CategoryResponse(category.CategoryId.Value, category.Name);
         }

@@ -51,6 +51,8 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Configuration
                 .HasForeignKey(s => s.WarehouseId)
                 .HasPrincipalKey(w => w.WarehouseId)
                 .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(s => s.RowVersion)
+    .IsRowVersion();
         }
     }
 }

@@ -23,6 +23,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error HasProducts => Error.Conflict(
   "Category.HasProducts",
   "Category cannot be deleted because it has products assigned to it.");
+            public static Error NameAlreadyExists => Error.Conflict(
+    "Category.NameAlreadyExists",
+    "A category with this name already exists.");
         }
       
     }

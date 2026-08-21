@@ -51,5 +51,10 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
         {
             _dbContext.Categories.Remove(category);
         }
+        public async Task<bool> ExistsByNameAsync(string name)
+        {
+            return await _dbContext.Categories
+                .AnyAsync(c => c.Name == name);
+        }
     }
 }

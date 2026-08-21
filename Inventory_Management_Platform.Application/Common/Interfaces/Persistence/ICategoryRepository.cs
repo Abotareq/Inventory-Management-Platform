@@ -15,5 +15,6 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
         Task<bool> ExistsAsync(CategoryId id);
         Task<bool> HasProductsAsync(CategoryId id);
         void Delete(Category category);
+        Task<bool> ExistsByNameAsync(string name);
     }
 }

@@ -28,6 +28,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error AlreadyExists => Error.Conflict(
                 "Stock.AlreadyExists",
                 "This product is already assigned to this warehouse.");
+            public static Error ConcurrencyConflict => Error.Conflict(
+    "Stock.ConcurrencyConflict",
+    "This stock record was modified by another user. Please retry your request.");
         }
     }
    

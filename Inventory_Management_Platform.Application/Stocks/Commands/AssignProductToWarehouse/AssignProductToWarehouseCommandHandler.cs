@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Stock;
 using Inventory_Management_Platform.Domain.DomainErrors;
@@ -33,7 +34,7 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AssignProduc
         }
 
         public async Task<ErrorOr<StockResponse>> Handle(
-            AssignProductToWarehouseCommand request, CancellationToken cancellationToken)
+      AssignProductToWarehouseCommand request, CancellationToken cancellationToken)
         {
             var productId = ProductId.Create(request.ProductId);
             var warehouseId = WarehouseId.Create(request.WarehouseId);
@@ -55,8 +56,15 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AssignProduc
 
             var stock = stockResult.Value;
 
-            await _stockRepository.AddAsync(stock);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            try
+            {
+                await _stockRepository.AddAsync(stock);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+            catch (UniqueConstraintViolationException)
+            {
+                return Errors.Stock.AlreadyExists;
+            }
 
             return new StockResponse(
                 stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value, stock.Quantity);

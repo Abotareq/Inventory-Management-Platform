@@ -1,4 +1,5 @@
-﻿using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+﻿using Inventory_Management_Platform.Application.Common.Exceptions;
+using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Domain.Category;
 using Inventory_Management_Platform.Domain.Product;
 using Inventory_Management_Platform.Domain.Stock;
@@ -8,6 +9,7 @@ using Inventory_Management_Platform.Domain.Warehouse;
 using Inventory_Management_Platform.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,7 +40,20 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await base.SaveChangesAsync(cancellationToken);
+            try
+            {
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new ConcurrencyConflictException(
+                    "The record was modified by another user. Please retry.");
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException { Number: 2601 or 2627 })
+            {
+                throw new UniqueConstraintViolationException(
+                    "A record with this value already exists.");
+            }
         }
 
     }
