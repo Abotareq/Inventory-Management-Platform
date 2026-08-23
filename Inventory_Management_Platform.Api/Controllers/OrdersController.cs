@@ -5,6 +5,7 @@ using Inventory_Management_Platform.Application.Orders.Commands.CompleteOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
 using Inventory_Management_Platform.Application.Orders.Queries.GetOrderById;
+using Inventory_Management_Platform.Application.Orders.Queries.GetOrderHistory;
 using Inventory_Management_Platform.Application.Orders.Queries.GetOrders;
 using Inventory_Management_Platform.Contracts.Order;
 using MediatR;
@@ -124,6 +125,19 @@ namespace Inventory_Management_Platform.Api.Controllers
             var query = new GetOrdersQuery(pageNumber, pageSize, customerId, status, fromDate, toDate);
 
             ErrorOr<PagedOrdersResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet("{id:guid}/history")]
+        [Authorize]
+        public async Task<IActionResult> GetHistory(
+    Guid id, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+        {
+            var query = new GetOrderHistoryQuery(id, pageNumber, pageSize);
+
+            ErrorOr<PagedOrderHistoryResponse> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
