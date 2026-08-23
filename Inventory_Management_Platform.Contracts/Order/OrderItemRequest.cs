@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Inventory_Management_Platform.Contracts.Order
 {
-    internal class OrderItemRequest
-    {
-    }
+    public sealed record OrderItemRequest(
+            Guid ProductId,
+            int Quantity);
 }

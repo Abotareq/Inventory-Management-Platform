@@ -56,7 +56,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.UpdateProd
             }
 
             var updateResult = product.UpdateDetails(
-                request.Name, request.Sku, request.Description, categoryId);
+                request.Name, request.Sku, request.Description, categoryId, request.Price);
 
             if (updateResult.IsError)
                 return updateResult.Errors;
@@ -69,7 +69,8 @@ namespace Inventory_Management_Platform.Application.Products.Commands.UpdateProd
                 product.Name,
                 product.Sku,
                 product.Description,
-                product.CategoryId?.Value);
+                product.CategoryId?.Value,
+                product.Price);
         }
     }
 }

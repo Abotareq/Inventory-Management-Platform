@@ -26,7 +26,7 @@ namespace Inventory_Management_Platform.Api.Controllers
         public async Task<IActionResult> Create(CreateProductRequest request)
         {
             var command = new CreateProductCommand(
-                request.Name, request.Sku, request.Description, request.CategoryId);
+                request.Name, request.Sku, request.Description, request.CategoryId, request.Price);
 
             ErrorOr<ProductResponse> result = await _mediator.Send(command);
 
@@ -39,7 +39,7 @@ namespace Inventory_Management_Platform.Api.Controllers
         public async Task<IActionResult> Update(Guid id, UpdateProductRequest request)
         {
             var command = new UpdateProductCommand(
-                id, request.Name, request.Sku, request.Description, request.CategoryId);
+                id, request.Name, request.Sku, request.Description, request.CategoryId, request.Price);
 
             ErrorOr<ProductResponse> result = await _mediator.Send(command);
 

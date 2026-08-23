@@ -46,7 +46,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
                     return Errors.Category.NotFound;
             }
 
-            var productResult = Product.Create(request.Name, request.Sku, request.Description, categoryId);
+            var productResult = Product.Create(request.Name, request.Sku, request.Description, categoryId, request.Price);
             if (productResult.IsError)
                 return productResult.Errors;
 
@@ -62,7 +62,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
                 return Errors.Product.SkuAlreadyExists;
             }
 
-            return new ProductResponse(product.ProductId.Value, product.Name, product.Sku, product.Description, product.CategoryId?.Value);
+            return new ProductResponse(product.ProductId.Value, product.Name, product.Sku, product.Description, product.CategoryId?.Value, product.Price);
         }
     }
 }

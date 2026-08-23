@@ -34,6 +34,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error HasStock => Error.Conflict(
         "Product.HasStock",
         "Product cannot be deleted because it has stock records assigned to it.");
+            public static Error InvalidPrice => Error.Validation(
+    "Product.InvalidPrice",
+    "Product price cannot be negative.");
         }
 
     }

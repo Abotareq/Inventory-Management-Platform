@@ -12,5 +12,6 @@ namespace Inventory_Management_Platform.Application.Products.Commands.UpdateProd
         string Name,
         string Sku,
         string? Description,
-        Guid? CategoryId) : IRequest<ErrorOr<ProductResponse>>;
+        Guid? CategoryId,
+         decimal Price) : IRequest<ErrorOr<ProductResponse>>;
 }

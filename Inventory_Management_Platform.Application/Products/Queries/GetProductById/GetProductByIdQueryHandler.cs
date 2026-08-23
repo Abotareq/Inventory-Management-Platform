@@ -34,7 +34,8 @@ namespace Inventory_Management_Platform.Application.Products.Queries.GetProductB
                 product.Name,
                 product.Sku,
                 product.Description,
-                product.CategoryId?.Value);
+                product.CategoryId?.Value
+                ,product.Price);
         }
     }
 }

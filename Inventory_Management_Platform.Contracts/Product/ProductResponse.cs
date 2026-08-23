@@ -9,5 +9,5 @@ namespace Inventory_Management_Platform.Contracts.Product
         string Name,
         string Sku,
         string? Description,
-        Guid? CategoryId);
+        Guid? CategoryId, decimal Price);
 }

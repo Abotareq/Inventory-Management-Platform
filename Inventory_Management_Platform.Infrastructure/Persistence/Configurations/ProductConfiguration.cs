@@ -26,7 +26,10 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Configuration
             builder.Property(p => p.Name)
                 .IsRequired()
                 .HasMaxLength(200);
-
+            builder.Property(p => p.Price)
+            .HasColumnType("decimal(18,2)")
+            .HasDefaultValue(0m)
+            .IsRequired();
             builder.Property(p => p.Sku)
                 .IsRequired()
                 .HasMaxLength(50);

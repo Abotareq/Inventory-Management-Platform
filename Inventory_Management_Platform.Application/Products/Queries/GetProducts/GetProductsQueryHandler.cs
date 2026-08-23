@@ -26,7 +26,7 @@ namespace Inventory_Management_Platform.Application.Products.Queries.GetProducts
 
             var response = items
                 .Select(p => new ProductResponse(
-                    p.ProductId.Value, p.Name, p.Sku, p.Description, p.CategoryId?.Value))
+                    p.ProductId.Value, p.Name, p.Sku, p.Description, p.CategoryId?.Value, p.Price))
                 .ToList();
 
             return new PagedProductsResponse(

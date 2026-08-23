@@ -13,6 +13,8 @@ namespace Inventory_Management_Platform.Application.Products.Commands.UpdateProd
             RuleFor(x => x.Name).NotEmpty().MaximumLength(200);
             RuleFor(x => x.Sku).NotEmpty().MaximumLength(50);
             RuleFor(x => x.Description).MaximumLength(1000);
+            RuleFor(x => x.Price).GreaterThanOrEqualTo(0);
+
         }
     }
 }

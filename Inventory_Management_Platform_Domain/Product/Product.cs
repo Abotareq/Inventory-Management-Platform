@@ -17,12 +17,15 @@ namespace Inventory_Management_Platform.Domain.Product
         public string? Description { get; private set; }
         public CategoryId? CategoryId { get; private set; }
 
+        public decimal Price { get; private set; }
+
         private Product(
             ProductId productId,
             string name,
             string sku,
             string? description,
-            CategoryId? categoryId)
+            CategoryId? categoryId,
+            decimal price)
             : base(productId.Value)
         {
             ProductId = productId;
@@ -30,6 +33,7 @@ namespace Inventory_Management_Platform.Domain.Product
             Sku = sku;
             Description = description;
             CategoryId = categoryId;
+            Price = price;
         }
 
         private Product() { }
@@ -38,27 +42,25 @@ namespace Inventory_Management_Platform.Domain.Product
             string name,
             string sku,
             string? description,
-            CategoryId? categoryId)
+            CategoryId? categoryId,
+            decimal price)
         {
-            var errors = Validate(name, sku);
+            var errors = Validate(name, sku, price);
             if (errors.Count > 0)
                 return errors;
 
             return new Product(
-                ProductId.CreateUnique(),
-                name,
-                sku,
-                description,
-                categoryId);
+                ProductId.CreateUnique(), name, sku, description, categoryId, price);
         }
 
         public ErrorOr<Updated> UpdateDetails(
             string name,
             string sku,
             string? description,
-            CategoryId? categoryId)
+            CategoryId? categoryId,
+            decimal price)
         {
-            var errors = Validate(name, sku);
+            var errors = Validate(name, sku, price);
             if (errors.Count > 0)
                 return errors;
 
@@ -66,11 +68,12 @@ namespace Inventory_Management_Platform.Domain.Product
             Sku = sku;
             Description = description;
             CategoryId = categoryId;
+            Price = price;
 
             return Result.Updated;
         }
 
-        private static List<Error> Validate(string name, string sku)
+        private static List<Error> Validate(string name, string sku, decimal price)
         {
             var errors = new List<Error>();
 
@@ -83,6 +86,9 @@ namespace Inventory_Management_Platform.Domain.Product
                 errors.Add(Errors.Product.SkuIsRequired);
             else if (sku.Length > 50)
                 errors.Add(Errors.Product.SkuTooLong);
+
+            if (price < 0)
+                errors.Add(Errors.Product.InvalidPrice);
 
             return errors;
         }
