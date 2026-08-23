@@ -1,9 +1,11 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
+using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
 using Inventory_Management_Platform.Contracts.Order;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Inventory_Management_Platform.Api.Controllers
@@ -29,6 +31,20 @@ namespace Inventory_Management_Platform.Api.Controllers
                 .ToList();
 
             var command = new CreateOrderCommand(request.CustomerId, items, userId);
+
+            ErrorOr<OrderResponse> result = await _mediator.Send(command);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpPost("{id:guid}/submit")]
+        [Authorize(Roles = "SalesAgent")]
+        public async Task<IActionResult> Submit(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+            var command = new SubmitOrderCommand(id, userId);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
 
