@@ -6,6 +6,7 @@ using Inventory_Management_Platform.Domain.Order.Enums;
 using Inventory_Management_Platform.Domain.Order.Events;
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using Inventory_Management_Platform.Domain.Product.ValueObjects;
+using Inventory_Management_Platform.Domain.Warehouse.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -40,7 +41,7 @@ namespace Inventory_Management_Platform.Domain.Order
             return new Order(OrderId.CreateUnique(), customerId, DateTime.UtcNow);
         }
 
-        public ErrorOr<Updated> AddItem(ProductId productId, int quantity, decimal unitPrice)
+        public ErrorOr<Updated> AddItem(ProductId productId, WarehouseId warehouseId, int quantity, decimal unitPrice)
         {
             if (Status != OrderStatus.Draft)
                 return Errors.Order.CannotModifyNonDraftOrder;
@@ -51,7 +52,7 @@ namespace Inventory_Management_Platform.Domain.Order
             if (unitPrice < 0)
                 return Errors.Order.InvalidUnitPrice;
 
-            _items.Add(OrderItem.Create(OrderId, productId, quantity, unitPrice));
+            _items.Add(OrderItem.Create(OrderId, productId, warehouseId, quantity, unitPrice));
 
             return Result.Updated;
         }

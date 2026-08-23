@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Orders.Commands.BeginProcessing;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
 using Inventory_Management_Platform.Contracts.Order;
@@ -27,7 +28,7 @@ namespace Inventory_Management_Platform.Api.Controllers
             var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
             var items = request.Items
-                .Select(i => new CreateOrderItem(i.ProductId, i.Quantity))
+                .Select(i => new CreateOrderItem(i.ProductId, i.WarehouseId, i.Quantity))
                 .ToList();
 
             var command = new CreateOrderCommand(request.CustomerId, items, userId);
@@ -45,6 +46,20 @@ namespace Inventory_Management_Platform.Api.Controllers
             var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
             var command = new SubmitOrderCommand(id, userId);
+
+            ErrorOr<OrderResponse> result = await _mediator.Send(command);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpPost("{id:guid}/begin-processing")]
+        [Authorize(Roles = "WarehouseOperator")]
+        public async Task<IActionResult> BeginProcessing(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+            var command = new BeginProcessingCommand(id, userId);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
 

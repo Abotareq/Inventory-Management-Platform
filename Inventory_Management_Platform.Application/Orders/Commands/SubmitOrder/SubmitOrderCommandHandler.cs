@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Common.Exceptions;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Application.Orders.Common;
 using Inventory_Management_Platform.Contracts.Order;
 using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Order;
@@ -48,19 +49,8 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder
                 return Errors.Order.ConcurrencyConflict;
             }
 
-            return MapToResponse(order);
+            return order.ToResponse();
         }
-
-        private static OrderResponse MapToResponse(Order order)
-        {
-            var items = order.Items
-                .Select(i => new OrderItemResponse(
-                    i.OrderItemId.Value, i.ProductId.Value, i.Quantity, i.UnitPriceSnapshot, i.LineTotal))
-                .ToList();
-
-            return new OrderResponse(
-                order.OrderId.Value, order.CustomerId.Value, order.Status.ToString(),
-                order.CreatedAt, order.TotalAmount, items);
-        }
+       
     }
 }

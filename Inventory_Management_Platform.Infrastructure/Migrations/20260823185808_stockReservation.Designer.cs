@@ -4,6 +4,7 @@ using Inventory_Management_Platform.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory_Management_Platform.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryManagementPlatformDbContext))]
-    partial class InventoryManagementPlatformDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260823185808_stockReservation")]
+    partial class stockReservation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,17 +146,11 @@ namespace Inventory_Management_Platform.Infrastructure.Migrations
                     b.Property<decimal>("UnitPriceSnapshot")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("WarehouseId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("WarehouseId");
 
                     b.ToTable("OrderItems", (string)null);
                 });
@@ -649,13 +646,6 @@ namespace Inventory_Management_Platform.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .HasPrincipalKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Inventory_Management_Platform.Domain.Warehouse.Warehouse", null)
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .HasPrincipalKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

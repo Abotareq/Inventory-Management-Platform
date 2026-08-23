@@ -2,6 +2,8 @@
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using Inventory_Management_Platform.Domain.Product;
 using Inventory_Management_Platform.Domain.Product.ValueObjects;
+using Inventory_Management_Platform.Domain.Warehouse;
+using Inventory_Management_Platform.Domain.Warehouse.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -44,6 +46,15 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Configuration
                 .WithMany()
                 .HasForeignKey(i => i.ProductId)
                 .HasPrincipalKey(p => p.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Property(i => i.WarehouseId)
+    .HasConversion(id => id.Value, value => WarehouseId.Create(value))
+    .HasColumnName("WarehouseId");
+
+            builder.HasOne<Warehouse>()
+                .WithMany()
+                .HasForeignKey(i => i.WarehouseId)
+                .HasPrincipalKey(w => w.WarehouseId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

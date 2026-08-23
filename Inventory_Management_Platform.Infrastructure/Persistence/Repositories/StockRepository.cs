@@ -97,5 +97,9 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
 
             return (items, totalCount);
         }
+        public async Task AddReservationAsync(StockReservation reservation)
+        {
+            await _dbContext.Set<StockReservation>().AddAsync(reservation);
+        }
     }
 }

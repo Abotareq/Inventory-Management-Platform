@@ -22,5 +22,6 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
         Task AddAdjustmentAsync(StockId stockId, StockAdjustment adjustment);
         Task<(List<StockAdjustment> Items, int TotalCount)> GetAdjustmentHistoryAsync(
             StockId stockId, int pageNumber, int pageSize);
+        Task AddReservationAsync(StockReservation reservation);
     }
 }

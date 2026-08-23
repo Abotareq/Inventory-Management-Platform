@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Inventory_Management_Platform.Application.Orders.Commands.CreateOrder
 {
-    public sealed record CreateOrderItem(Guid ProductId, int Quantity);
+    public sealed record CreateOrderItem(Guid ProductId, Guid WarehouseId, int Quantity);
 
     public sealed record CreateOrderCommand(
         Guid CustomerId,
