@@ -32,14 +32,16 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
         }
 
         public async Task<(List<DomainOrder> Items, int TotalCount)> GetPagedAsync(
-            int pageNumber,
-            int pageSize,
-            CustomerId? customerId = null,
-            OrderStatus? status = null,
-            DateTime? fromDate = null,
-            DateTime? toDate = null)
+        int pageNumber,
+        int pageSize,
+        CustomerId? customerId = null,
+        OrderStatus? status = null,
+        DateTime? fromDate = null,
+        DateTime? toDate = null)
         {
-            var query = _dbContext.Orders.AsQueryable();
+            var query = _dbContext.Orders
+                .Include("_items")
+                .AsQueryable();
 
             if (customerId is not null)
                 query = query.Where(o => o.CustomerId == customerId);
@@ -64,7 +66,6 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
 
             return (items, totalCount);
         }
-
         public async Task AddAsync(DomainOrder order)
         {
             await _dbContext.Orders.AddAsync(order);

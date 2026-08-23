@@ -5,6 +5,7 @@ using Inventory_Management_Platform.Application.Orders.Commands.CompleteOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
 using Inventory_Management_Platform.Application.Orders.Queries.GetOrderById;
+using Inventory_Management_Platform.Application.Orders.Queries.GetOrders;
 using Inventory_Management_Platform.Contracts.Order;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -105,6 +106,24 @@ namespace Inventory_Management_Platform.Api.Controllers
             var query = new GetOrderByIdQuery(id);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetAll(
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 20,
+    [FromQuery] Guid? customerId = null,
+    [FromQuery] string? status = null,
+    [FromQuery] DateTime? fromDate = null,
+    [FromQuery] DateTime? toDate = null)
+        {
+            var query = new GetOrdersQuery(pageNumber, pageSize, customerId, status, fromDate, toDate);
+
+            ErrorOr<PagedOrdersResponse> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
