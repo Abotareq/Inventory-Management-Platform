@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Orders.Commands.BeginProcessing;
+using Inventory_Management_Platform.Application.Orders.Commands.CompleteOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
 using Inventory_Management_Platform.Contracts.Order;
@@ -60,6 +61,20 @@ namespace Inventory_Management_Platform.Api.Controllers
             var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
             var command = new BeginProcessingCommand(id, userId);
+
+            ErrorOr<OrderResponse> result = await _mediator.Send(command);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpPost("{id:guid}/complete")]
+        [Authorize(Roles = "WarehouseOperator")]
+        public async Task<IActionResult> Complete(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+            var command = new CompleteOrderCommand(id, userId);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
 
