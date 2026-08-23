@@ -40,6 +40,7 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence
         public DbSet<OrderItem> OrderItems => Set<OrderItem>();
         public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
         public DbSet<StockReservation> StockReservations => Set<StockReservation>();
+        public DbSet<IdempotencyRecord> IdempotencyRecords => Set<IdempotencyRecord>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); // required — configures Identity's own tables

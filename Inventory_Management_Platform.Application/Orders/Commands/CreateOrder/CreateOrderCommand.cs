@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Inventory_Management_Platform.Application.Common.Interfaces.Services;
 using Inventory_Management_Platform.Contracts.Order;
 using MediatR;
 using System;
@@ -12,5 +13,6 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.CreateOrder
     public sealed record CreateOrderCommand(
         Guid CustomerId,
         List<CreateOrderItem> Items,
-        Guid PerformedByUserId) : IRequest<ErrorOr<OrderResponse>>;
+        Guid PerformedByUserId,
+        string IdempotencyKey) : IRequest<ErrorOr<OrderResponse>>, IIdempotentRequest;
 }

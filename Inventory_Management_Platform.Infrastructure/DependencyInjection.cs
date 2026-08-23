@@ -1,6 +1,8 @@
-﻿using Inventory_Management_Platform.Application.Common.Interfaces.Authentication;
+﻿using Inventory_Management_Platform.Application.Common.Behaviors;
+using Inventory_Management_Platform.Application.Common.Interfaces.Authentication;
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Application.Common.Interfaces.Services;
+using Inventory_Management_Platform.Application.Common.Models;
 using Inventory_Management_Platform.Infrastructure.Authintication;
 using Inventory_Management_Platform.Infrastructure.Identity;
 using Inventory_Management_Platform.Infrastructure.Persistence;
@@ -8,6 +10,7 @@ using Inventory_Management_Platform.Infrastructure.Persistence.Auditing;
 using Inventory_Management_Platform.Infrastructure.Persistence.Interceptors;
 using Inventory_Management_Platform.Infrastructure.Persistence.Repositories;
 using Inventory_Management_Platform.Infrastructure.Services;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -58,6 +61,10 @@ namespace Inventory_Management_Platform.Infrastructure
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<AuditInterceptor>();
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
+            ///
+            services.AddScoped<IIdempotencyService, IdempotencyService>();
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotencyPipelineBehavior<,>));
             return services;
 
         }

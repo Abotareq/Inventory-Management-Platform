@@ -36,7 +36,7 @@ namespace Inventory_Management_Platform.Api.Controllers
                 .Select(i => new CreateOrderItem(i.ProductId, i.WarehouseId, i.Quantity))
                 .ToList();
 
-            var command = new CreateOrderCommand(request.CustomerId, items, userId);
+            var command = new CreateOrderCommand(request.CustomerId, items, userId, request.IdempotencyKey);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
 
