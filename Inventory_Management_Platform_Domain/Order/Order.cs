@@ -63,10 +63,11 @@ namespace Inventory_Management_Platform.Domain.Order
             if (_items.Count == 0)
                 return Errors.Order.EmptyOrder;
 
+            var fromStatus = Status;
             Status = OrderStatus.Submitted;
 
             RaiseDomainEvent(new OrderCreated(OrderId, CustomerId, TotalAmount, performedByUserId, DateTime.UtcNow));
-            RaiseDomainEvent(new OrderSubmitted(OrderId, performedByUserId, DateTime.UtcNow));
+            RaiseDomainEvent(new OrderSubmitted(OrderId, fromStatus, performedByUserId, DateTime.UtcNow));
 
             return Result.Updated;
         }
@@ -76,7 +77,10 @@ namespace Inventory_Management_Platform.Domain.Order
             if (Status != OrderStatus.Submitted)
                 return Errors.Order.InvalidStatusTransition;
 
+            var fromStatus = Status;
             Status = OrderStatus.Processing;
+
+            RaiseDomainEvent(new OrderProcessingStarted(OrderId, fromStatus, performedByUserId, DateTime.UtcNow));
 
             return Result.Updated;
         }
@@ -86,9 +90,10 @@ namespace Inventory_Management_Platform.Domain.Order
             if (Status != OrderStatus.Processing)
                 return Errors.Order.InvalidStatusTransition;
 
+            var fromStatus = Status;
             Status = OrderStatus.Completed;
 
-            RaiseDomainEvent(new OrderCompleted(OrderId, performedByUserId, DateTime.UtcNow));
+            RaiseDomainEvent(new OrderCompleted(OrderId, fromStatus, performedByUserId, DateTime.UtcNow));
 
             return Result.Updated;
         }
@@ -98,10 +103,10 @@ namespace Inventory_Management_Platform.Domain.Order
             if (Status is OrderStatus.Completed or OrderStatus.Cancelled)
                 return Errors.Order.InvalidStatusTransition;
 
-            var previousStatus = Status;
+            var fromStatus = Status;
             Status = OrderStatus.Cancelled;
 
-            RaiseDomainEvent(new OrderCancelled(OrderId, previousStatus, performedByUserId, DateTime.UtcNow));
+            RaiseDomainEvent(new OrderCancelled(OrderId, fromStatus, performedByUserId, DateTime.UtcNow));
 
             return Result.Updated;
         }

@@ -8,5 +8,5 @@ using System.Text;
 namespace Inventory_Management_Platform.Domain.Order.Events
 {
     public sealed record OrderCancelled(
-       OrderId OrderId, OrderStatus PreviousStatus, Guid PerformedByUserId, DateTime Timestamp) : IDomainEvent;
+     OrderId OrderId, OrderStatus FromStatus, Guid PerformedByUserId, DateTime Timestamp) : IDomainEvent;
 }

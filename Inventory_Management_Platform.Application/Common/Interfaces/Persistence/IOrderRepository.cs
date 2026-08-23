@@ -1,4 +1,5 @@
 ﻿using Inventory_Management_Platform.Domain.Order;
+using Inventory_Management_Platform.Domain.Order.Entites;
 using Inventory_Management_Platform.Domain.Order.Enums;
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using System;
@@ -20,5 +21,8 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
             DateTime? toDate = null);
         Task AddAsync(Order order);
         void Update(Order order);
+        Task AddHistoryAsync(OrderHistory history);
+        Task<(List<OrderHistory> Items, int TotalCount)> GetHistoryAsync(
+    OrderId orderId, int pageNumber, int pageSize);
     }
 }

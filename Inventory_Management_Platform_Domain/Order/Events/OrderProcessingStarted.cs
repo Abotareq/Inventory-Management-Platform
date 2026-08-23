@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Inventory_Management_Platform.Domain.Order.Events
 {
-    public sealed record OrderSubmitted(
-        OrderId OrderId, OrderStatus FromStatus, Guid PerformedByUserId, DateTime Timestamp) : IDomainEvent;
-
+    public sealed record OrderProcessingStarted(
+       OrderId OrderId, OrderStatus FromStatus, Guid PerformedByUserId, DateTime Timestamp) : IDomainEvent;
 }
