@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Orders.Commands.BeginProcessing;
+using Inventory_Management_Platform.Application.Orders.Commands.CancelOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CompleteOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
@@ -75,6 +76,20 @@ namespace Inventory_Management_Platform.Api.Controllers
             var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
 
             var command = new CompleteOrderCommand(id, userId);
+
+            ErrorOr<OrderResponse> result = await _mediator.Send(command);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpPost("{id:guid}/cancel")]
+        [Authorize(Roles = "SalesAgent,WarehouseOperator")]
+        public async Task<IActionResult> Cancel(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirstValue(JwtRegisteredClaimNames.Sub)!);
+
+            var command = new CancelOrderCommand(id, userId);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
 
