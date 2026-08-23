@@ -4,6 +4,7 @@ using Inventory_Management_Platform.Application.Orders.Commands.CancelOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CompleteOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.CreateOrder;
 using Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder;
+using Inventory_Management_Platform.Application.Orders.Queries.GetOrderById;
 using Inventory_Management_Platform.Contracts.Order;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -92,6 +93,18 @@ namespace Inventory_Management_Platform.Api.Controllers
             var command = new CancelOrderCommand(id, userId);
 
             ErrorOr<OrderResponse> result = await _mediator.Send(command);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet("{id:guid}")]
+        [Authorize]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var query = new GetOrderByIdQuery(id);
+
+            ErrorOr<OrderResponse> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
