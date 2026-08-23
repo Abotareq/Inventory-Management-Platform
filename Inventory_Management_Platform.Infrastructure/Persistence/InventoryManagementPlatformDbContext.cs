@@ -2,6 +2,8 @@
 using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Application.Common.Models;
 using Inventory_Management_Platform.Domain.Category;
+using Inventory_Management_Platform.Domain.Order;
+using Inventory_Management_Platform.Domain.Order.Entites;
 using Inventory_Management_Platform.Domain.Product;
 using Inventory_Management_Platform.Domain.Stock;
 using Inventory_Management_Platform.Domain.Stock.Entites;
@@ -34,6 +36,9 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence
         public DbSet<Stock> Stocks => Set<Stock>();
         public DbSet<StockAdjustment> StockAdjustments => Set<StockAdjustment>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+        public DbSet<Order> Orders => Set<Order>();
+        public DbSet<OrderItem> OrderItems => Set<OrderItem>();
+        public DbSet<OrderHistory> OrderHistories => Set<OrderHistory>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder); // required — configures Identity's own tables

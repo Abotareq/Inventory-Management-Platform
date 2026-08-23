@@ -23,4 +23,3 @@ namespace Inventory_Management_Platform.Domain.Order.ValueObjects
         }
     }
 }
-}

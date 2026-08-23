@@ -26,6 +26,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
 
             public static Error InvalidStatusTransition => Error.Conflict(
                 "Order.InvalidStatusTransition", "This status transition is not allowed from the order's current state.");
+            public static Error ConcurrencyConflict => Error.Conflict(
+    "Order.ConcurrencyConflict",
+    "This order was modified by another user. Please retry your request.");
         }
     }
 }

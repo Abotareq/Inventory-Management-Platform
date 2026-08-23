@@ -49,6 +49,7 @@ namespace Inventory_Management_Platform.Infrastructure
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
             services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
             // Authentication services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();

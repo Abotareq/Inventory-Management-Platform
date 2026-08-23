@@ -22,6 +22,7 @@ namespace Inventory_Management_Platform.Domain.Order
         public DateTime CreatedAt { get; private set; }
         public IReadOnlyList<OrderItem> Items => _items.AsReadOnly();
         public decimal TotalAmount => _items.Sum(i => i.LineTotal);
+        public byte[] RowVersion { get; private set; } = Array.Empty<byte>();
 
         private Order(OrderId orderId, CustomerId customerId, DateTime createdAt)
             : base(orderId.Value)
