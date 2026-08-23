@@ -31,6 +31,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error ConcurrencyConflict => Error.Conflict(
     "Stock.ConcurrencyConflict",
     "This stock record was modified by another user. Please retry your request.");
+            public static Error InvalidReleaseAmount => Error.Validation(
+    "Stock.InvalidReleaseAmount",
+    "Cannot release or commit more than the currently reserved amount.");
         }
     }
    
