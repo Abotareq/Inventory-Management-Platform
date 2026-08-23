@@ -58,6 +58,10 @@ namespace Inventory_Management_Platform.Application.Authintication.Commands.Regi
                     var managerResult = Manager.Create(userId, request.FullName, request.Email);
                     userResult = managerResult.IsError ? managerResult.Errors : managerResult.Value;
                     break;
+                case "SalesAgent":
+                    var salesAgentResult = SalesAgent.Create(userId, request.FullName, request.Email);
+                    userResult = salesAgentResult.IsError ? salesAgentResult.Errors : salesAgentResult.Value;
+                    break;
 
                 default:
                     userResult = Errors.User.InvalidRole;

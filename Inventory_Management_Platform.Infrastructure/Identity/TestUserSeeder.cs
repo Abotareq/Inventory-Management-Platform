@@ -24,6 +24,8 @@ namespace Inventory_Management_Platform.Infrastructure.Identity
                 "Operator User", "operator@example.com", "OperatorPass123!", "WarehouseOperator");
             await SeedUserAsync(userManager, userRepository, unitOfWork,
                 "Manager User", "manager@example.com", "ManagerPass123!", "Manager");
+            await SeedUserAsync(userManager, userRepository, unitOfWork,
+             "SalesAgent User", "salesagent@example.com", "SalesAgentPass123!", "SalesAgent");
         }
 
         private static async Task SeedUserAsync(

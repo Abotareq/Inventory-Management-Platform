@@ -12,7 +12,8 @@ namespace Inventory_Management_Platform.Infrastructure.Identity
         {
         "Administrator",
         "WarehouseOperator",
-        "Manager"
+        "Manager",
+        "SalesAgent"
     };
 
         public static async Task SeedRolesAsync(IServiceProvider serviceProvider)
