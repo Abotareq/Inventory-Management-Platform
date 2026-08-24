@@ -8,22 +8,24 @@ using System.Text;
 
 namespace Inventory_Management_Platform.Application.Stocks.EventHandlers
 {
-    public sealed class StockReservedHandler : INotificationHandler<StockReserved>
-    {
-        private readonly IStockRepository _stockRepository;
-
-        public StockReservedHandler(IStockRepository stockRepository)
+   
+        public sealed class StockReservedHandler : INotificationHandler<StockReserved>
         {
-            _stockRepository = stockRepository;
+            private readonly IStockRepository _stockRepository;
+
+            public StockReservedHandler(IStockRepository stockRepository)
+            {
+                _stockRepository = stockRepository;
+            }
+
+            public async Task Handle(StockReserved notification, CancellationToken cancellationToken)
+            {
+                var reservation = StockReservation.Create(
+                    notification.StockId, notification.OrderId, notification.Amount, "Reserved",
+                    notification.PerformedByUserId, notification.Timestamp);
+
+                await _stockRepository.AddReservationAsync(reservation);
+            }
         }
 
-        public async Task Handle(StockReserved notification, CancellationToken cancellationToken)
-        {
-            var reservation = StockReservation.Create(
-                notification.StockId, notification.OrderId, notification.Amount, "Reserved",
-                notification.PerformedByUserId, notification.Timestamp);
-
-            await _stockRepository.AddReservationAsync(reservation);
-        }
-    }
-}
+ }

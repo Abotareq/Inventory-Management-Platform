@@ -101,5 +101,21 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
         {
             await _dbContext.Set<StockReservation>().AddAsync(reservation);
         }
+        public async Task<(List<StockReservation> Items, int TotalCount)> GetReservationHistoryAsync(
+    StockId stockId, int pageNumber, int pageSize)
+        {
+            var query = _dbContext.Set<StockReservation>()
+                .Where(r => r.StockId == stockId)
+                .OrderByDescending(r => r.Timestamp);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }

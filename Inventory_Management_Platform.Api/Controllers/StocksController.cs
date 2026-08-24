@@ -4,6 +4,7 @@ using Inventory_Management_Platform.Application.Stocks.Commands.AssignProductToW
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockAdjustmentHistory;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByProduct;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByWarehouse;
+using Inventory_Management_Platform.Application.Stocks.Queries.GetStockReservationHistory;
 using Inventory_Management_Platform.Contracts.Stock;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -85,6 +86,19 @@ namespace Inventory_Management_Platform.Api.Controllers
             var query = new GetStockAdjustmentHistoryQuery(stockId, pageNumber, pageSize);
 
             ErrorOr<PagedStockAdjustmentsResponse> result = await _mediator.Send(query);
+
+            return result.Match(
+                response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpGet("{stockId:guid}/reservations")]
+        [Authorize]
+        public async Task<IActionResult> GetReservationHistory(
+    Guid stockId, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
+        {
+            var query = new GetStockReservationHistoryQuery(stockId, pageNumber, pageSize);
+
+            ErrorOr<PagedStockReservationsResponse> result = await _mediator.Send(query);
 
             return result.Match(
                 response => Ok(response),
