@@ -45,9 +45,8 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.CancelOrder
             if (cancelResult.IsError)
                 return cancelResult.Errors;
 
-            // Stock was only ever reserved once the order reached Submitted or Processing
-            // (via BeginProcessing). A Draft order never touched Stock, so there's nothing to release.
-            var stockWasReserved = statusBeforeCancel is OrderStatus.Submitted or OrderStatus.Processing;
+            // Stock is only ever reserved once BeginProcessing runs, not at Submit.
+            var stockWasReserved = statusBeforeCancel is OrderStatus.Processing;
 
             if (stockWasReserved)
             {

@@ -53,7 +53,8 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock
             }
 
             return new StockResponse(
-                stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value, stock.Quantity);
+    stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value,
+    stock.Quantity, stock.Reserved, stock.Available);
         }
     }
 }

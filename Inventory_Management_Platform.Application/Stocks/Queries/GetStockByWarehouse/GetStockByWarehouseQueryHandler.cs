@@ -28,8 +28,9 @@ namespace Inventory_Management_Platform.Application.Stocks.Queries.GetStockByWar
                 warehouseId, request.PageNumber, request.PageSize);
 
             var response = items
-                .Select(s => new StockResponse(
-                    s.StockId.Value, s.ProductId.Value, s.WarehouseId.Value, s.Quantity))
+                .Select(stock => new StockResponse(
+    stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value,
+    stock.Quantity, stock.Reserved, stock.Available))
                 .ToList();
 
             return new PagedStockResponse(response, request.PageNumber, request.PageSize, totalCount);

@@ -66,8 +66,9 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AssignProduc
                 return Errors.Stock.AlreadyExists;
             }
 
-            return new StockResponse(
-                stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value, stock.Quantity);
+            return  new StockResponse(
+    stock.StockId.Value, stock.ProductId.Value, stock.WarehouseId.Value,
+    stock.Quantity, stock.Reserved, stock.Available);
         }
     }
 }

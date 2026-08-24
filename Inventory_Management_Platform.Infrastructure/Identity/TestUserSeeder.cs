@@ -59,6 +59,7 @@ namespace Inventory_Management_Platform.Infrastructure.Identity
                 "Administrator" => Administrator.Create(userId, fullName, email).Value,
                 "WarehouseOperator" => WarehouseOperator.Create(userId, fullName, email).Value,
                 "Manager" => Manager.Create(userId, fullName, email).Value,
+                "SalesAgent" => SalesAgent.Create(userId, fullName, email).Value,
                 _ => null
             };
 

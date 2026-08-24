@@ -8,5 +8,7 @@ namespace Inventory_Management_Platform.Contracts.Stock
         Guid StockId,
         Guid ProductId,
         Guid WarehouseId,
-        int Quantity);
+        int Quantity,
+        int Reserved,
+        int Available);
 }
