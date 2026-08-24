@@ -34,6 +34,17 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error InvalidReleaseAmount => Error.Validation(
     "Stock.InvalidReleaseAmount",
     "Cannot release or commit more than the currently reserved amount.");
+            public static Error HasActiveReservations => Error.Conflict(
+    "Stock.HasActiveReservations",
+    "Stock record cannot be deleted while it has active reservations.");
+
+            public static Error HasQuantity => Error.Conflict(
+                "Stock.HasQuantity",
+                "Stock record cannot be deleted while it still has physical quantity on hand.");
+
+            public static Error HasOrderHistory => Error.Conflict(
+                "Stock.HasOrderHistory",
+                "Stock record cannot be deleted because it is referenced by order history.");
         }
     }
    

@@ -37,6 +37,9 @@ namespace Inventory_Management_Platform.Domain.DomainErrors
             public static Error InvalidPrice => Error.Validation(
     "Product.InvalidPrice",
     "Product price cannot be negative.");
+            public static Error HasOrderItems => Error.Conflict(
+    "Product.HasOrderItems",
+    "Product cannot be deleted because it is referenced by one or more orders.");
         }
 
     }

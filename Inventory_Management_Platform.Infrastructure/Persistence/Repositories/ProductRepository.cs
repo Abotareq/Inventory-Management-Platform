@@ -1,10 +1,11 @@
 ﻿using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Domain.Order.Entites;
 using Inventory_Management_Platform.Domain.Product;
 using Inventory_Management_Platform.Domain.Product.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
 {
     public sealed class ProductRepository : IProductRepository
@@ -60,6 +61,11 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Stocks
                 .AnyAsync(s => s.ProductId == id);
+        }
+        public async Task<bool> HasOrderItemsAsync(ProductId id)
+        {
+            return await _dbContext.Set<OrderItem>()
+                .AnyAsync(i => i.ProductId == id);
         }
     }
 }

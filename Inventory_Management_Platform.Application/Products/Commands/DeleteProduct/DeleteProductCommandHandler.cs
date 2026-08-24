@@ -24,7 +24,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.DeleteProd
         }
 
         public async Task<ErrorOr<Deleted>> Handle(
-            DeleteProductCommand request, CancellationToken cancellationToken)
+     DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var productId = ProductId.Create(request.ProductId);
 
@@ -34,6 +34,9 @@ namespace Inventory_Management_Platform.Application.Products.Commands.DeleteProd
 
             if (await _productRepository.HasStockAsync(productId))
                 return Errors.Product.HasStock;
+
+            if (await _productRepository.HasOrderItemsAsync(productId))
+                return Errors.Product.HasOrderItems;
 
             _productRepository.Delete(product);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

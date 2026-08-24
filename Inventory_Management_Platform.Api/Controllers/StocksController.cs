@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using Inventory_Management_Platform.Application.Stocks.Commands.AdjustStock;
 using Inventory_Management_Platform.Application.Stocks.Commands.AssignProductToWarehouse;
+using Inventory_Management_Platform.Application.Stocks.Commands.DeleteStock;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockAdjustmentHistory;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByProduct;
 using Inventory_Management_Platform.Application.Stocks.Queries.GetStockByWarehouse;
@@ -102,6 +103,18 @@ namespace Inventory_Management_Platform.Api.Controllers
 
             return result.Match(
                 response => Ok(response),
+                errors => Problem(errors));
+        }
+        [HttpDelete("{id:guid}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var command = new DeleteStockCommand(id);
+
+            ErrorOr<Deleted> result = await _mediator.Send(command);
+
+            return result.Match(
+                deleted => NoContent(),
                 errors => Problem(errors));
         }
     }

@@ -1,13 +1,14 @@
 ﻿using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
+using Inventory_Management_Platform.Domain.Order.Entites;
 using Inventory_Management_Platform.Domain.Product.ValueObjects;
 using Inventory_Management_Platform.Domain.Stock;
 using Inventory_Management_Platform.Domain.Stock.Entites;
 using Inventory_Management_Platform.Domain.Stock.ValueObjects;
 using Inventory_Management_Platform.Domain.Warehouse.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
 {
     public sealed class StockRepository : IStockRepository
@@ -116,6 +117,16 @@ namespace Inventory_Management_Platform.Infrastructure.Persistence.Repositories
                 .ToListAsync();
 
             return (items, totalCount);
+        }
+        public void Delete(Stock stock)
+        {
+            _dbContext.Stocks.Remove(stock);
+        }
+
+        public async Task<bool> HasOrderItemsAsync(ProductId productId, WarehouseId warehouseId)
+        {
+            return await _dbContext.Set<OrderItem>()
+                .AnyAsync(i => i.ProductId == productId && i.WarehouseId == warehouseId);
         }
     }
 }
