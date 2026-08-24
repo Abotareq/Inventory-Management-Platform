@@ -7,6 +7,7 @@ using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Order;
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,15 +20,17 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.BeginProcess
         private readonly IOrderRepository _orderRepository;
         private readonly IStockRepository _stockRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<BeginProcessingCommandHandler> _logger;
         public BeginProcessingCommandHandler(
             IOrderRepository orderRepository,
             IStockRepository stockRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<BeginProcessingCommandHandler> logger)
         {
             _orderRepository = orderRepository;
             _stockRepository = stockRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<OrderResponse>> Handle(
@@ -64,6 +67,7 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.BeginProcess
             }
             catch (ConcurrencyConflictException)
             {
+                _logger.LogWarning("Concurrency conflict beginning order processing. OrderId: {OrderId}", request.OrderId);
                 return Errors.Order.ConcurrencyConflict;
             }
 

@@ -15,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 }
 
 var app = builder.Build();
+app.UseGlobalExceptionHandling();
+app.UseCorrelationIdLogging();
 
 if (app.Environment.IsDevelopment())
 {

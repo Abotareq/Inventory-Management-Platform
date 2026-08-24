@@ -6,6 +6,7 @@ using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Product.ValueObjects;
 using Inventory_Management_Platform.Domain.Warehouse.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,17 +21,19 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AssignProduc
         private readonly IProductRepository _productRepository;
         private readonly IWarehouseRepository _warehouseRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<AssignProductToWarehouseCommandHandler> _logger;
         public AssignProductToWarehouseCommandHandler(
             IStockRepository stockRepository,
             IProductRepository productRepository,
             IWarehouseRepository warehouseRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<AssignProductToWarehouseCommandHandler> logger)
         {
             _stockRepository = stockRepository;
             _productRepository = productRepository;
             _warehouseRepository = warehouseRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<StockResponse>> Handle(
@@ -63,6 +66,8 @@ namespace Inventory_Management_Platform.Application.Stocks.Commands.AssignProduc
             }
             catch (UniqueConstraintViolationException)
             {
+                _logger.LogWarning("Unique constraint violation assigning product to warehouse. ProductId: {ProductId}, WarehouseId: {WarehouseId}", request.ProductId, request.WarehouseId);
+
                 return Errors.Stock.AlreadyExists;
             }
 

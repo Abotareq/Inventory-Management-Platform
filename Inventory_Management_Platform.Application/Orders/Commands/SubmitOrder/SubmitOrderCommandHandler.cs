@@ -7,6 +7,7 @@ using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Order;
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,13 +19,15 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<SubmitOrderCommandHandler> _logger;
         public SubmitOrderCommandHandler(
             IOrderRepository orderRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<SubmitOrderCommandHandler> logger)
         {
             _orderRepository = orderRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<OrderResponse>> Handle(
@@ -46,6 +49,7 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.SubmitOrder
             }
             catch (ConcurrencyConflictException)
             {
+                _logger.LogWarning("Concurrency conflict submitting order. OrderId: {OrderId}", request.OrderId);
                 return Errors.Order.ConcurrencyConflict;
             }
 

@@ -6,6 +6,7 @@ using Inventory_Management_Platform.Contracts.Order;
 using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Order.ValueObjects;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,15 +19,17 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.CompleteOrde
         private readonly IOrderRepository _orderRepository;
         private readonly IStockRepository _stockRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<CompleteOrderCommandHandler> _logger;
         public CompleteOrderCommandHandler(
             IOrderRepository orderRepository,
             IStockRepository stockRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<CompleteOrderCommandHandler> logger)
         {
             _orderRepository = orderRepository;
             _stockRepository = stockRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<OrderResponse>> Handle(
@@ -61,6 +64,7 @@ namespace Inventory_Management_Platform.Application.Orders.Commands.CompleteOrde
             }
             catch (ConcurrencyConflictException)
             {
+                _logger.LogWarning("Concurrency conflict completing order. OrderId: {OrderId}", request.OrderId);
                 return Errors.Order.ConcurrencyConflict;
             }
 

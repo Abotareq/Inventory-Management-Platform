@@ -4,6 +4,7 @@ using Inventory_Management_Platform.Application.Common.Interfaces.Persistence;
 using Inventory_Management_Platform.Contracts.Category;
 using Inventory_Management_Platform.Domain.DomainErrors;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,13 +16,16 @@ namespace Inventory_Management_Platform.Application.Categories.Commands.CreateCa
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<CreateCategoryCommandHandler> _logger;
 
         public CreateCategoryCommandHandler(
             ICategoryRepository categoryRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<CreateCategoryCommandHandler> logger)
         {
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<CategoryResponse>> Handle(
@@ -43,6 +47,9 @@ namespace Inventory_Management_Platform.Application.Categories.Commands.CreateCa
             }
             catch (UniqueConstraintViolationException)
             {
+                _logger.LogWarning(
+       "Unique constraint violation creating category. Name: {Name}",
+       request.Name);
                 return Errors.Category.NameAlreadyExists;
             }
 

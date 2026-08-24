@@ -5,6 +5,7 @@ using Inventory_Management_Platform.Contracts.Category;
 using Inventory_Management_Platform.Domain.Category.ValueObjects;
 using Inventory_Management_Platform.Domain.DomainErrors;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,13 +17,16 @@ namespace Inventory_Management_Platform.Application.Categories.Commands.RenameCa
     {
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<RenameCategoryCommandHandler> _logger;
 
         public RenameCategoryCommandHandler(
             ICategoryRepository categoryRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<RenameCategoryCommandHandler> logger)
         {
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<CategoryResponse>> Handle(
@@ -49,6 +53,7 @@ namespace Inventory_Management_Platform.Application.Categories.Commands.RenameCa
             }
             catch (UniqueConstraintViolationException)
             {
+                _logger.LogWarning("Unique constraint violation renaming category. CategoryId: {CategoryId}, Name: {Name}", request.CategoryId, request.Name);
                 return Errors.Category.NameAlreadyExists;
             }
 

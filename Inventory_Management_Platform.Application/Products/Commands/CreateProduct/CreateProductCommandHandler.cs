@@ -6,6 +6,7 @@ using Inventory_Management_Platform.Domain.Category.ValueObjects;
 using Inventory_Management_Platform.Domain.DomainErrors;
 using Inventory_Management_Platform.Domain.Product;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,15 +19,17 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IUnitOfWork _unitOfWork;
-
+        private readonly ILogger<CreateProductCommandHandler> _logger;
         public CreateProductCommandHandler(
             IProductRepository productRepository,
             ICategoryRepository categoryRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ILogger<CreateProductCommandHandler> logger)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<ProductResponse>> Handle(
@@ -59,6 +62,7 @@ namespace Inventory_Management_Platform.Application.Products.Commands.CreateProd
             }
             catch (UniqueConstraintViolationException)
             {
+                _logger.LogWarning("Unique constraint violation creating product. Sku: {Sku}", request.Sku);
                 return Errors.Product.SkuAlreadyExists;
             }
 

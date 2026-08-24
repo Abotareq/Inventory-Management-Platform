@@ -25,5 +25,7 @@ namespace Inventory_Management_Platform.Application.Common.Interfaces.Persistenc
         Task AddReservationAsync(StockReservation reservation);
         Task<(List<StockReservation> Items, int TotalCount)> GetReservationHistoryAsync(
     StockId stockId, int pageNumber, int pageSize);
+        void Delete(Stock stock);
+        Task<bool> HasOrderItemsAsync(ProductId productId, WarehouseId warehouseId);
     }
 }
