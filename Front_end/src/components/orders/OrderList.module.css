@@ -1,0 +1,11 @@
+.id {
+  font-weight: 500;
+}
+
+.dim {
+  color: var(--color-text-dim);
+}
+
+.nowrap {
+  white-space: nowrap;
+}

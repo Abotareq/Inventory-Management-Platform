@@ -6,10 +6,13 @@ import { ROLES } from './config/constants';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
 import CategoriesPage from './pages/CategoriesPage';
+import CreateOrderPage from './pages/CreateOrderPage';
 import DashboardPage from './pages/DashboardPage';
 import ForbiddenPage from './pages/ForbiddenPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import OrderDetailPage from './pages/OrderDetailPage';
+import OrdersPage from './pages/OrdersPage';
 import ProductsPage from './pages/ProductsPage';
 import StockDetailPage from './pages/StockDetailPage';
 import StockPage from './pages/StockPage';
@@ -26,10 +29,16 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route index element={<DashboardPage />} />
+                <Route path="/orders" element={<OrdersPage />} />
+                <Route path="/orders/:id" element={<OrderDetailPage />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/warehouses" element={<WarehousesPage />} />
                 <Route path="/stock" element={<StockPage />} />
                 <Route path="/stock/:stockId" element={<StockDetailPage />} />
+
+                <Route element={<ProtectedRoute roles={[ROLES.SALES_AGENT]} />}>
+                  <Route path="/orders/new" element={<CreateOrderPage />} />
+                </Route>
 
                 <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>
                   <Route path="/categories" element={<CategoriesPage />} />
