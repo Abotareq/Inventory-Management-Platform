@@ -1,0 +1,32 @@
+.sku {
+  white-space: nowrap;
+}
+
+.nameCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.description {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  max-width: 48ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dim {
+  color: var(--color-text-faint);
+}
+
+.actions {
+  display: inline-flex;
+  gap: var(--space-1);
+}

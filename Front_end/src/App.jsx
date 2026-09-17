@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage';
 import ForbiddenPage from './pages/ForbiddenPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ProductsPage from './pages/ProductsPage';
 import WarehousesPage from './pages/WarehousesPage';
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route index element={<DashboardPage />} />
+                <Route path="/products" element={<ProductsPage />} />
                 <Route path="/warehouses" element={<WarehousesPage />} />
 
                 <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>

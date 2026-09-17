@@ -1,0 +1,20 @@
+.filters {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.search {
+  flex: 1 1 220px;
+  max-width: 360px;
+}
+
+.category {
+  flex: 0 1 220px;
+}
+
+.pageSize {
+  flex: 0 0 110px;
+}
