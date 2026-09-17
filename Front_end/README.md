@@ -35,6 +35,12 @@ Copy `.env.example` to `.env.local` to override. For a production build set
 `VITE_API_BASE_URL` to the deployed API, and enable CORS on the backend for the
 client's origin.
 
+## Deployment
+
+Production runs on Vercel: https://inventory-management-platform-nu.vercel.app
+
+`vercel.json` rewrites `/api/*` to the deployed API (`http://inventoryplatform.somee.com`) so the browser only talks to the HTTPS origin (no CORS or mixed-content issues), and sends every other path to `index.html` for client-side routing. Deploy from this folder with `vercel deploy --prod`.
+
 ## Structure
 
 ```
