@@ -15,6 +15,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import OrdersPage from './pages/OrdersPage';
 import ProductsPage from './pages/ProductsPage';
+import RegisterUserPage from './pages/RegisterUserPage';
 import StockDetailPage from './pages/StockDetailPage';
 import StockPage from './pages/StockPage';
 import WarehousesPage from './pages/WarehousesPage';
@@ -44,6 +45,7 @@ export default function App() {
                 <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>
                   <Route path="/categories" element={<CategoriesPage />} />
                   <Route path="/audit-logs" element={<AuditLogsPage />} />
+                  <Route path="/users/new" element={<RegisterUserPage />} />
                 </Route>
 
                 <Route path="/forbidden" element={<ForbiddenPage />} />

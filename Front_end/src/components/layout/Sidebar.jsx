@@ -14,6 +14,7 @@ const NAV = [
   { to: '/warehouses', label: 'Warehouses' },
   { to: '/categories', label: 'Categories', roles: [ROLES.ADMINISTRATOR] },
   { to: '/audit-logs', label: 'Audit logs', roles: [ROLES.ADMINISTRATOR] },
+  { to: '/users/new', label: 'Register user', roles: [ROLES.ADMINISTRATOR] },
 ];
 
 export default function Sidebar({ open, onNavigate }) {
