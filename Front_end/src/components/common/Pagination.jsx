@@ -7,6 +7,8 @@ export default function Pagination({ pageNumber, pageSize, totalCount, onPageCha
   const from = total === 0 ? 0 : (pageNumber - 1) * pageSize + 1;
   const to = Math.min(pageNumber * pageSize, total);
 
+  if (total === 0) return null;
+
   if (total <= pageSize && pageNumber === 1) {
     return (
       <nav className={styles.bar} aria-label="Pagination">

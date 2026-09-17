@@ -13,9 +13,14 @@ const dateOnly = new Intl.DateTimeFormat('en-GB', {
   day: '2-digit',
 });
 
+// The API serialises UTC timestamps without a zone designator ("2026-08-24T14:58:51").
+// Without this, browsers would parse them as local time.
+const NO_ZONE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?$/;
+
 function toDate(value) {
   if (!value) return null;
-  const d = value instanceof Date ? value : new Date(value);
+  const raw = typeof value === 'string' && NO_ZONE.test(value) ? value + 'Z' : value;
+  const d = raw instanceof Date ? raw : new Date(raw);
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
