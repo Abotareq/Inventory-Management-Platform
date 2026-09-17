@@ -11,6 +11,8 @@ import ForbiddenPage from './pages/ForbiddenPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProductsPage from './pages/ProductsPage';
+import StockDetailPage from './pages/StockDetailPage';
+import StockPage from './pages/StockPage';
 import WarehousesPage from './pages/WarehousesPage';
 
 export default function App() {
@@ -26,6 +28,8 @@ export default function App() {
                 <Route index element={<DashboardPage />} />
                 <Route path="/products" element={<ProductsPage />} />
                 <Route path="/warehouses" element={<WarehousesPage />} />
+                <Route path="/stock" element={<StockPage />} />
+                <Route path="/stock/:stockId" element={<StockDetailPage />} />
 
                 <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>
                   <Route path="/categories" element={<CategoriesPage />} />

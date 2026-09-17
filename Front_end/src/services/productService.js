@@ -40,3 +40,15 @@ export async function updateProduct(id, values) {
 export async function deleteProduct(id) {
   await apiClient.delete(`/products/${id}`);
 }
+
+// Walks every page so selects can list all products. The API caps pageSize at 100.
+export async function getAllProducts(config, { maxPages = 20 } = {}) {
+  const pageSize = 100;
+  const all = [];
+  for (let pageNumber = 1; pageNumber <= maxPages; pageNumber += 1) {
+    const page = await getProducts({ pageNumber, pageSize }, config);
+    all.push(...(page.items ?? []));
+    if (all.length >= (page.totalCount ?? 0) || (page.items ?? []).length < pageSize) break;
+  }
+  return all;
+}

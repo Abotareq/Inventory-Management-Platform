@@ -1,0 +1,15 @@
+.nowrap {
+  white-space: nowrap;
+}
+
+.positive {
+  color: #8fbf8d;
+}
+
+.negative {
+  color: #e28a7e;
+}
+
+.dim {
+  color: var(--color-text-faint);
+}
