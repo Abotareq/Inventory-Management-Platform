@@ -1,18 +1,35 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import ToastStack from './components/common/ToastStack';
+import AppLayout from './components/layout/AppLayout';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
-import ToastStack from './components/common/ToastStack';
+import DashboardPage from './pages/DashboardPage';
+import ForbiddenPage from './pages/ForbiddenPage';
+import LoginPage from './pages/LoginPage';
+import NotFoundPage from './pages/NotFoundPage';
 
-// Routing and layout land in the next stage; this keeps the foundation buildable.
 export default function App() {
   return (
-    <AuthProvider>
-      <ToastProvider>
-        <main style={{ padding: 24 }}>
-          <h1>Inventory</h1>
-          <p>App shell coming next.</p>
-        </main>
-        <ToastStack />
-      </ToastProvider>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route element={<AppLayout />}>
+                <Route index element={<DashboardPage />} />
+                <Route path="/forbidden" element={<ForbiddenPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
+            </Route>
+
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <ToastStack />
+        </ToastProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
