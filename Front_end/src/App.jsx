@@ -2,8 +2,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import ToastStack from './components/common/ToastStack';
 import AppLayout from './components/layout/AppLayout';
+import { ROLES } from './config/constants';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import CategoriesPage from './pages/CategoriesPage';
 import DashboardPage from './pages/DashboardPage';
 import ForbiddenPage from './pages/ForbiddenPage';
 import LoginPage from './pages/LoginPage';
@@ -20,6 +22,11 @@ export default function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route index element={<DashboardPage />} />
+
+                <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>
+                  <Route path="/categories" element={<CategoriesPage />} />
+                </Route>
+
                 <Route path="/forbidden" element={<ForbiddenPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
