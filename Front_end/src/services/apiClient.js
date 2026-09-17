@@ -107,7 +107,16 @@ const STATUS_FALLBACKS = {
   404: "That record doesn't exist or was removed.",
   409: 'That change conflicts with the current state. Refresh and try again.',
   500: 'Something went wrong on the server. Try again in a moment.',
+  502: 'The server is not responding. Try again in a moment.',
+  503: 'The server is temporarily unavailable. Try again in a moment.',
+  504: 'The server took too long to respond. Try again.',
 };
+
+// Hosting layers (IIS, proxies) answer with HTML pages when the app itself is
+// down, e.g. "HTTP Error 500.30 - ASP.NET Core app failed to start".
+function looksLikeHtml(value) {
+  return typeof value === 'string' && /<\s*(!doctype|html|body)\b/i.test(value);
+}
 
 function flattenValidationErrors(errors) {
   if (!errors || typeof errors !== 'object') return [];
@@ -143,6 +152,12 @@ export function extractErrorMessage(error) {
     if (typeof data.detail === 'string' && data.detail.trim()) {
       return data.detail;
     }
+  }
+
+  if (looksLikeHtml(data)) {
+    return status >= 500
+      ? 'The server is down or restarting. Try again in a minute.'
+      : (STATUS_FALLBACKS[status] ?? `Request failed (${status}).`);
   }
 
   if (typeof data === 'string' && data.trim()) {
