@@ -1,0 +1,8 @@
+.id {
+  color: var(--color-text-dim);
+}
+
+.actions {
+  display: inline-flex;
+  gap: var(--space-1);
+}
