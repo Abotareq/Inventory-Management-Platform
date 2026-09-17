@@ -1,0 +1,79 @@
+:root {
+  /* Surfaces */
+  --color-bg: #15181b;
+  --color-panel: #1d2124;
+  --color-panel-raised: #23282c;
+  --color-border: #2a2f34;
+  --color-border-strong: #383e44;
+
+  /* Text */
+  --color-text: #e9e6df;
+  --color-text-dim: #a3a9ae;
+  --color-text-faint: #6b7177;
+  --color-text-on-accent: #15181b;
+
+  /* Semantic */
+  --color-accent: #e3a23b;
+  --color-accent-hover: #edb45a;
+  --color-success: #5c8a5b;
+  --color-danger: #c1584b;
+  --color-danger-hover: #d0685b;
+  --color-info: #4d7da0;
+  --color-neutral: #8b9096;
+
+  /* Low-alpha backgrounds for badges and inline notices */
+  --color-accent-bg: rgba(227, 162, 59, 0.14);
+  --color-success-bg: rgba(92, 138, 91, 0.16);
+  --color-danger-bg: rgba(193, 88, 75, 0.16);
+  --color-info-bg: rgba(77, 125, 160, 0.16);
+  --color-neutral-bg: rgba(139, 144, 150, 0.14);
+
+  /* Type */
+  --font-heading: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  /* Shape */
+  --radius: 3px;
+  --radius-lg: 4px;
+
+  /* Layout */
+  --sidebar-width: 224px;
+  --topbar-height: 56px;
+  --content-max-width: 1440px;
+
+  /* Focus */
+  --focus-ring: 2px solid var(--color-accent);
+  --focus-offset: 2px;
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Z-index */
+  --z-sidebar: 30;
+  --z-topbar: 20;
+  --z-modal: 100;
+  --z-toast: 200;
+}
