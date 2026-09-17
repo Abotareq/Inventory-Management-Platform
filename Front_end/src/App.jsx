@@ -5,6 +5,7 @@ import AppLayout from './components/layout/AppLayout';
 import { ROLES } from './config/constants';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './contexts/ToastContext';
+import AuditLogsPage from './pages/AuditLogsPage';
 import CategoriesPage from './pages/CategoriesPage';
 import CreateOrderPage from './pages/CreateOrderPage';
 import DashboardPage from './pages/DashboardPage';
@@ -42,6 +43,7 @@ export default function App() {
 
                 <Route element={<ProtectedRoute roles={[ROLES.ADMINISTRATOR]} />}>
                   <Route path="/categories" element={<CategoriesPage />} />
+                  <Route path="/audit-logs" element={<AuditLogsPage />} />
                 </Route>
 
                 <Route path="/forbidden" element={<ForbiddenPage />} />
