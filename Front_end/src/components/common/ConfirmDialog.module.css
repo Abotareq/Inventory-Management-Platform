@@ -1,0 +1,12 @@
+.message {
+  color: var(--color-text-dim);
+}
+
+.error {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-danger-bg);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+}
